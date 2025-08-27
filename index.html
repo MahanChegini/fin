@@ -114,9 +114,7 @@
           <div class="label">درصد مفاصا</div>
           <div class="actions" id="percentChips">
             <button class="btn-ghost chip selected" data-val="7.8">7.8٪</button>
-            <!-- ⬇️ اضافه‌شده -->
             <button class="btn-ghost chip" data-val="7.78">7.78٪</button>
-            <!-- ⬆️ اضافه‌شده -->
             <button class="btn-ghost chip" data-val="16.67">16.67٪</button>
           </div>
         </div>
@@ -206,6 +204,13 @@
       });
     });
 
+    // فرمت سه‌رقمی هنگام تایپ (بدون تغییر در منطق محاسبات)
+    $('#base').addEventListener('input', e=>{
+      let val = normalizeNumber(e.target.value);
+      if(!val){ e.target.value = ''; return; }
+      e.target.value = new Intl.NumberFormat('en-US').format(val);
+    });
+
     $('#calcBtn').addEventListener('click', e=>{ e.preventDefault(); compute(); });
     $('#resetBtn').addEventListener('click', e=>{
       e.preventDefault();
@@ -218,6 +223,7 @@
       try{ await navigator.clipboard.writeText(txt); e.target.textContent = 'کپی شد!'; setTimeout(()=> e.target.textContent = 'کپی نتایج',1500);}catch(err){ alert('کپی نشد'); }
     });
 
+    // سوییچ‌ها (همون استایل و رفتار قبلی)
     $('#faDigits').addEventListener('change', compute);
     $('#unitSwitch').addEventListener('change', e=>{
       unitMode = e.target.checked ? "تومان" : "ریال";
