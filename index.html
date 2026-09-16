@@ -91,6 +91,67 @@
       font-size:12px; font-weight:600;
       padding:8px 14px; border-radius:999px;
     }
+    .top-actions{display:flex; align-items:center; gap:8px}
+    .icon-btn{
+      width:40px; height:40px; flex:none;
+      border-radius:12px;
+      background:#fff;
+      color:#181818;
+      border:1px solid var(--c-line);
+      display:grid; place-items:center;
+      padding:0;
+    }
+    .icon-btn:hover{border-color:var(--c-secondary); color:var(--c-secondary); background:#f5f7ff}
+    .icon-btn svg{width:20px; height:20px; display:block}
+
+    .settings-mask{
+      position:fixed; inset:0; z-index:40;
+      background:rgba(16,22,40,.28);
+      display:flex; align-items:flex-end; justify-content:center;
+      padding:12px;
+      opacity:0; pointer-events:none;
+      transition:opacity .2s ease;
+    }
+    .settings-mask.open{opacity:1; pointer-events:auto}
+    .settings-panel{
+      width:min(520px, 100%);
+      max-height:min(88vh, 720px);
+      overflow:auto;
+      background:rgba(255,255,255,.82);
+      border:1px solid rgba(255,255,255,.8);
+      border-radius:22px 22px 16px 16px;
+      box-shadow:0 24px 60px rgba(0,65,255,.16);
+      backdrop-filter:blur(22px) saturate(160%);
+      -webkit-backdrop-filter:blur(22px) saturate(160%);
+      padding:18px 18px calc(20px + env(safe-area-inset-bottom));
+      transform:translateY(24px);
+      transition:transform .28s cubic-bezier(.22,1,.36,1);
+    }
+    .settings-block .amount-box{min-height:52px; border-radius:14px}
+    .settings-block .amount-box input{font-size:18px}
+    .settings-mask.open .settings-panel{transform:none}
+    .settings-head{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:14px;
+    }
+    .settings-head h2{margin:0; font-size:18px}
+    .settings-block{
+      background:#fff;
+      border:1px solid var(--c-line);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+    .settings-block h3{
+      margin:0 0 10px;
+      font-size:13px;
+      color:var(--c-secondary);
+    }
+    .logic-list{margin:0; padding:0; list-style:none; font-size:13px; line-height:1.9; color:var(--c-muted)}
+    .logic-list b{color:var(--c-text); font-weight:700}
+    .settings-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px}
+    .settings-actions .btn-primary,
+    .settings-actions .btn-ghost{flex:1}
 
     .wrap{
       width:min(1120px, calc(100% - 32px));
@@ -270,6 +331,7 @@
       font-weight:700;
     }
     .hint{margin:8px 0 0; font-size:12px; color:var(--c-muted)}
+    .optional{color:var(--c-muted); font-weight:500; font-size:12px}
 
     .actions{display:flex; flex-wrap:wrap; gap:10px}
     .btn-primary,.btn-ghost{
@@ -362,6 +424,8 @@
       font-size:16px;
     }
     .row.deduct .v{color:var(--c-danger)}
+    .v.muted{color:var(--c-muted); font-weight:600; font-size:14px}
+    .row[hidden]{display:none !important}
 
     .copy-ico{
       width:32px; height:32px; flex:none;
@@ -477,6 +541,7 @@
       .brand{font-size:13px; gap:8px; min-width:0}
       .mark img{height:28px}
       .top-chip{display:none}
+      .icon-btn{width:38px; height:38px}
 
       .wrap{
         width:calc(100% - 20px);
@@ -565,6 +630,12 @@
       }
     }
 
+    @media (min-width:861px){
+      .settings-mask{align-items:center; padding:24px}
+      .settings-panel{border-radius:22px; transform:translateY(12px)}
+      .settings-mask.open .settings-panel{transform:none}
+    }
+
     @media (hover: none){
       .chip:hover{border-color:transparent; background:#fff}
       .chip.selected:hover{background:var(--c-secondary); color:#fff}
@@ -591,14 +662,19 @@
         <span class="mark"><img src="logo.png" alt="لوگو"></span>
         محاسبه سپرده بیمه
       </div>
-      <div class="top-chip">محاسبه آسان سپرده بیمه</div>
+      <div class="top-actions">
+        <div class="top-chip">محاسبه آسان سپرده بیمه</div>
+        <button class="icon-btn" id="settingsBtn" type="button" aria-label="تنظیمات" title="تنظیمات">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
   <main class="wrap" id="app">
     <section class="hero">
       <h1>محاسبه مفاصاحساب</h1>
-      <p>درصد و مبلغ مبنا را وارد کنید تا کسر بیمه، مالیات و مبلغ قابل پرداخت مشخص شود.</p>
+      <p>درصد و مبلغ مبنا را وارد کنید تا کسر بیمه، مالیات و مبلغ قابل پرداخت مشخص شود. تبصره در صورت نیاز به‌صورت اختیاری محاسبه می‌شود.</p>
     </section>
 
     <section class="board">
@@ -633,16 +709,22 @@
           </div>
         </div>
 
+        <div class="field">
+          <label class="label" for="smsCount">تعداد پیامک <span class="optional">(اختیاری)</span></label>
+          <div class="amount-box">
+            <span class="unit">
+              <span class="unit-kicker">واحد</span>
+              <span class="unit-name">عدد</span>
+            </span>
+            <input id="smsCount" inputmode="numeric" placeholder="100" aria-label="تعداد پیامک" autocomplete="off" />
+          </div>
+          <p class="hint" id="noteHint">اگر وارد شود، برای هر پیامک ۴۰ ریال تبصره به مبلغ نهایی اضافه می‌شود</p>
+        </div>
+
         <div class="actions">
           <button class="btn-primary" id="calcBtn" type="button">محاسبه</button>
           <button class="btn-ghost" id="resetBtn" type="button">ریست</button>
           <button class="btn-ghost" id="copyBtn" type="button">کپی نتایج</button>
-        </div>
-
-        <div class="formula">
-          <div><b>کسر مفاصا</b> = مبلغ مبنا × درصد مفاصا</div>
-          <div><b>مالیات</b> = مبلغ مبنا × ۱۰٪</div>
-          <div><b>قابل پرداخت</b> = مبلغ مبنا − کسر + مالیات</div>
         </div>
       </div>
 
@@ -665,6 +747,26 @@
         </div>
 
         <div class="rows">
+          <div class="row">
+            <div class="k" id="taxLabel">مبلغ مالیات (10%)</div>
+            <div class="value-line">
+              <div class="v" id="tax">—</div>
+              <button type="button" class="copy-ico" data-copy="tax" aria-label="کپی مبلغ مالیات" title="کپی" disabled>
+                <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="row" id="noteRow">
+            <div class="k">مبلغ تبصره</div>
+            <div class="value-line">
+              <div class="v muted" id="note">محاسبه نشده</div>
+              <button type="button" class="copy-ico" data-copy="note" aria-label="کپی مبلغ تبصره" title="کپی" disabled>
+                <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </button>
+            </div>
+          </div>
           <div class="row deduct">
             <div class="k">مبلغ سپرده بیمه (نیاز به کسر)</div>
             <div class="value-line">
@@ -676,10 +778,10 @@
             </div>
           </div>
           <div class="row">
-            <div class="k">مبلغ مالیات (10%)</div>
+            <div class="k">مبلغ کل فاکتور (بدون مفاصا)</div>
             <div class="value-line">
-              <div class="v" id="tax">—</div>
-              <button type="button" class="copy-ico" data-copy="tax" aria-label="کپی مبلغ مالیات" title="کپی" disabled>
+              <div class="v" id="invoice">—</div>
+              <button type="button" class="copy-ico" data-copy="invoice" aria-label="کپی مبلغ کل فاکتور" title="کپی" disabled>
                 <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
               </button>
@@ -710,6 +812,63 @@
     </footer>
   </main>
 
+  <div class="settings-mask" id="settingsMask">
+    <div class="settings-panel" role="dialog" aria-labelledby="settingsTitle" aria-modal="true">
+      <div class="settings-head">
+        <h2 id="settingsTitle">تنظیمات</h2>
+        <button class="icon-btn" id="settingsClose" type="button" aria-label="بستن">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="settings-block">
+        <h3>منطق محاسباتی</h3>
+        <ul class="logic-list">
+          <li><b>کسر مفاصا</b> = مبلغ مبنا × درصد مفاصا</li>
+          <li><b>مالیات</b> = مبلغ مبنا × <span id="fxTax">۱۰٪</span></li>
+          <li><b>تبصره</b> = تعداد پیامک × <span id="fxNote">۴ تومان (۴۰ ریال)</span> — اختیاری</li>
+          <li><b>کل فاکتور</b> = مبلغ مبنا + مالیات + تبصره</li>
+          <li><b>قابل پرداخت</b> = مبلغ مبنا − کسر + مالیات + تبصره</li>
+        </ul>
+      </div>
+
+      <div class="settings-block">
+        <h3>تنظیمات محاسبه</h3>
+        <div class="field">
+          <label class="label" for="taxPercent">درصد مالیات</label>
+          <div class="custom-box">
+            <span class="pct">٪</span>
+            <input id="taxPercent" inputmode="decimal" placeholder="10" aria-label="درصد مالیات" autocomplete="off" />
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:12px">
+          <label class="label" for="noteToman">تبصره هر پیامک</label>
+          <div class="amount-box">
+            <span class="unit">
+              <span class="unit-kicker">واحد</span>
+              <span class="unit-name">تومان</span>
+            </span>
+            <input id="noteToman" inputmode="decimal" placeholder="4" aria-label="تبصره هر پیامک" autocomplete="off" />
+          </div>
+          <p class="hint" id="noteSettingHint">معادل ۴۰ ریال برای هر پیامک</p>
+        </div>
+        <div class="settings-actions">
+          <button class="btn-primary" id="saveSettings" type="button">ذخیره تنظیمات</button>
+          <button class="btn-ghost" id="resetSettings" type="button">بازگشت به پیش‌فرض</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-ico" aria-hidden="true">
+      <svg class="t-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+      <svg class="t-err" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><circle cx="12" cy="16.2" r="1" fill="currentColor" stroke="none"/></svg>
+      <svg class="t-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r="1" fill="currentColor" stroke="none"/></svg>
+    </span>
+    <span class="toast-msg">کپی شد</span>
+  </div>
+
   <script>
     const $ = (q) => document.querySelector(q);
     const persianDigitMap = {'۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','٬':','};
@@ -732,14 +891,95 @@
       catch(e){ return String(value); }
     }
     function syncBaseDigits(){
-      const val = normalizeNumber($('#base').value);
-      document.body.classList.toggle('fa-nums', $('#faDigits').checked);
-      $('#base').placeholder = $('#faDigits').checked ? '۱۷۳٬۸۶۰٬۰۰۰' : '173,860,000';
-      if (!val){ return; }
-      $('#base').value = formatInput(val);
+      const fa = $('#faDigits').checked;
+      document.body.classList.toggle('fa-nums', fa);
+      $('#base').placeholder = fa ? '۱۷۳٬۸۶۰٬۰۰۰' : '173,860,000';
+      $('#smsCount').placeholder = fa ? '۱۰۰' : '100';
+      const baseVal = normalizeNumber($('#base').value);
+      if (baseVal) $('#base').value = formatInput(baseVal);
+      const smsVal = normalizeNumber($('#smsCount').value);
+      if (smsVal) $('#smsCount').value = formatInput(Math.round(smsVal));
     }
 
-    let unitMode = "ریال"; // پیش‌فرض
+    const SETTINGS_KEY = 'fin-calc-settings';
+    const DEFAULT_SETTINGS = { taxPercent: 10, noteToman: 4 };
+
+    function loadSettings(){
+      try{
+        const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+        const taxPercent = Number(raw.taxPercent);
+        const noteToman = Number(raw.noteToman);
+        return {
+          taxPercent: isFinite(taxPercent) && taxPercent >= 0 ? taxPercent : DEFAULT_SETTINGS.taxPercent,
+          noteToman: isFinite(noteToman) && noteToman >= 0 ? noteToman : DEFAULT_SETTINGS.noteToman
+        };
+      }catch(e){
+        return { taxPercent: DEFAULT_SETTINGS.taxPercent, noteToman: DEFAULT_SETTINGS.noteToman };
+      }
+    }
+    function persistSettings(){
+      try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }catch(e){}
+    }
+    function formatRate(value){
+      const fa = $('#faDigits').checked;
+      try{ return new Intl.NumberFormat(fa ? 'fa-IR' : 'en-US', { maximumFractionDigits: 4 }).format(value); }
+      catch(e){ return String(value); }
+    }
+    function noteRate(){
+      return unitMode === "تومان" ? settings.noteToman : settings.noteToman * 10;
+    }
+    function updateNoteHint(){
+      $('#noteHint').textContent = `اگر وارد شود، برای هر پیامک ${formatRate(noteRate())} ${unitMode} تبصره به مبلغ نهایی اضافه می‌شود`;
+    }
+    function applySettingsLabels(){
+      const taxTxt = formatRate(settings.taxPercent);
+      const noteT = formatRate(settings.noteToman);
+      const noteR = formatRate(settings.noteToman * 10);
+      $('#taxLabel').textContent = `مبلغ مالیات (${taxTxt}٪)`;
+      $('#fxTax').textContent = `${taxTxt}٪`;
+      $('#fxNote').textContent = `${noteT} تومان (${noteR} ریال)`;
+      $('#noteSettingHint').textContent = `معادل ${noteR} ریال برای هر پیامک`;
+      updateNoteHint();
+    }
+    function fillSettingsFields(){
+      $('#taxPercent').value = formatRate(settings.taxPercent);
+      $('#noteToman').value = formatRate(settings.noteToman);
+    }
+    function readSettingsForm(){
+      const taxRaw = $('#taxPercent').value;
+      const noteRaw = $('#noteToman').value;
+      if (!String(taxRaw).trim()){
+        toast('درصد مالیات را وارد کنید', 'error');
+        return null;
+      }
+      if (!String(noteRaw).trim()){
+        toast('مبلغ تبصره را وارد کنید', 'error');
+        return null;
+      }
+      const taxPercent = normalizeNumber(taxRaw);
+      const noteToman = normalizeNumber(noteRaw);
+      if (!isFinite(taxPercent) || taxPercent < 0){
+        toast('درصد مالیات معتبر نیست', 'error');
+        return null;
+      }
+      if (!isFinite(noteToman) || noteToman < 0){
+        toast('مبلغ تبصره معتبر نیست', 'error');
+        return null;
+      }
+      return { taxPercent, noteToman };
+    }
+    function openSettings(){
+      fillSettingsFields();
+      $('#settingsMask').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSettings(){
+      $('#settingsMask').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    let unitMode = "ریال";
+    let settings = loadSettings();
     let toastTimer;
 
     function toast(message, type){
@@ -774,19 +1014,26 @@
       let base = normalizeNumber($('#base').value);
 
       const ready = !!base && percent !== null && isFinite(percent);
-      const tax = base * 0.10;
+      const tax = base * (settings.taxPercent / 100);
       const deduct = ready ? base * (percent / 100) : 0;
-      const payable = ready ? (base - deduct) + tax : 0;
+      const smsRaw = $('#smsCount').value;
+      const smsCount = String(smsRaw).trim() ? Math.round(normalizeNumber(smsRaw)) : 0;
+      const note = (ready && smsCount > 0) ? smsCount * noteRate() : 0;
+      const invoice = ready ? base + tax + note : 0;
+      const payable = ready ? (base - deduct) + tax + note : 0;
 
       $('#deduct').textContent = ready ? `${formatMoney(deduct, fa)} ${unitMode}` : '—';
       $('#tax').textContent = ready ? `${formatMoney(tax, fa)} ${unitMode}` : '—';
+      $('#note').textContent = note ? `${formatMoney(note, fa)} ${unitMode}` : 'محاسبه نشده';
+      $('#note').classList.toggle('muted', !note);
+      $('#invoice').textContent = ready ? `${formatMoney(invoice, fa)} ${unitMode}` : '—';
       $('#payable').textContent = ready ? `${formatMoney(payable, fa)} ${unitMode}` : '—';
 
       $('#statement').classList.toggle('has-value', !!ready);
       $('#activePercent').textContent = label;
       document.querySelectorAll('.copy-ico').forEach(btn=>{
         const el = document.getElementById(btn.dataset.copy);
-        btn.disabled = !el || el.textContent.trim() === '—';
+        btn.disabled = !el || el.textContent.trim() === '—' || el.textContent.trim() === 'محاسبه نشده';
       });
     }
 
@@ -821,6 +1068,12 @@
       e.target.value = formatInput(val);
       compute();
     });
+    $('#smsCount').addEventListener('input', e=>{
+      let val = Math.round(normalizeNumber(e.target.value));
+      if(!val){ e.target.value = ''; compute(); return; }
+      e.target.value = formatInput(val);
+      compute();
+    });
 
     $('#calcBtn').addEventListener('click', e=>{
       e.preventDefault();
@@ -839,7 +1092,10 @@
     $('#resetBtn').addEventListener('click', e=>{
       e.preventDefault();
       $('#base').value = '';
-      ['#deduct','#tax','#payable'].forEach(sel => $(sel).textContent = '—');
+      $('#smsCount').value = '';
+      ['#deduct','#tax','#invoice','#payable'].forEach(sel => $(sel).textContent = '—');
+      $('#note').textContent = 'محاسبه نشده';
+      $('#note').classList.add('muted');
       $('#statement').classList.remove('has-value');
       document.querySelectorAll('.copy-ico').forEach(btn=> btn.disabled = true);
       toast('فرم ریست شد', 'info');
@@ -848,7 +1104,9 @@
       e.preventDefault();
       const btn = $('#copyBtn');
       const { label } = selectedPercent();
-      const txt = `نتایج محاسبه مفاصا\nدرصد مفاصا: ${label}\nمبلغ مبنا: ${formatMoney(normalizeNumber($('#base').value), $('#faDigits').checked)} ${unitMode}\nمبلغ کسر مفاصا: ${$('#deduct').textContent}\nمبلغ مالیات: ${$('#tax').textContent}\nمبلغ قابل پرداخت: ${$('#payable').textContent}`;
+      const smsVal = normalizeNumber($('#smsCount').value);
+      const noteLine = smsVal ? `\nتعداد پیامک: ${formatInput(Math.round(smsVal))}\nمبلغ تبصره: ${$('#note').textContent}` : '';
+      const txt = `نتایج محاسبه مفاصا\nدرصد مفاصا: ${label}\nمبلغ مبنا: ${formatMoney(normalizeNumber($('#base').value), $('#faDigits').checked)} ${unitMode}${noteLine}\nمبلغ کل فاکتور: ${$('#invoice').textContent}\nمبلغ کسر مفاصا: ${$('#deduct').textContent}\nمبلغ مالیات: ${$('#tax').textContent}\nمبلغ قابل پرداخت: ${$('#payable').textContent}`;
       try{
         await navigator.clipboard.writeText(txt);
         toast('نتایج کپی شد');
@@ -858,6 +1116,8 @@
     // سوییچ‌ها (همون استایل و رفتار قبلی)
     $('#faDigits').addEventListener('change', ()=>{
       syncBaseDigits();
+      applySettingsLabels();
+      if ($('#settingsMask').classList.contains('open')) fillSettingsFields();
       compute();
       toast($('#faDigits').checked ? 'ارقام فارسی فعال شد' : 'ارقام انگلیسی فعال شد', 'info');
     });
@@ -866,6 +1126,7 @@
       $('#unitLabel').textContent = `مبنای محاسبه: ${unitMode}`;
       $('#unitText').textContent = unitMode;
       $('#unitEcho').textContent = unitMode;
+      updateNoteHint();
       compute();
       toast(`مبنای محاسبه به ${unitMode} تغییر کرد`, 'info');
     });
@@ -874,7 +1135,7 @@
       btn.addEventListener('click', async ()=>{
         const el = document.getElementById(btn.dataset.copy);
         const txt = el?.textContent?.trim();
-        if (!txt || txt === '—') return;
+        if (!txt || txt === '—' || txt === 'محاسبه نشده') return;
         try{
           await navigator.clipboard.writeText(txt);
           btn.classList.add('copied');
@@ -884,17 +1145,43 @@
       });
     });
 
+    $('#settingsBtn').addEventListener('click', openSettings);
+    $('#settingsClose').addEventListener('click', closeSettings);
+    $('#settingsMask').addEventListener('click', e=>{
+      if (e.target.id === 'settingsMask') closeSettings();
+    });
+    document.addEventListener('keydown', e=>{
+      if (e.key === 'Escape' && $('#settingsMask').classList.contains('open')) closeSettings();
+    });
+    $('#taxPercent').addEventListener('keydown', e=>{
+      if (e.key === 'Enter'){ e.preventDefault(); $('#saveSettings').click(); }
+    });
+    $('#noteToman').addEventListener('keydown', e=>{
+      if (e.key === 'Enter'){ e.preventDefault(); $('#saveSettings').click(); }
+    });
+    $('#saveSettings').addEventListener('click', ()=>{
+      const next = readSettingsForm();
+      if (!next) return;
+      settings = next;
+      persistSettings();
+      applySettingsLabels();
+      compute();
+      closeSettings();
+      toast('تنظیمات ذخیره شد');
+    });
+    $('#resetSettings').addEventListener('click', ()=>{
+      settings = { taxPercent: DEFAULT_SETTINGS.taxPercent, noteToman: DEFAULT_SETTINGS.noteToman };
+      persistSettings();
+      fillSettingsFields();
+      applySettingsLabels();
+      compute();
+      toast('تنظیمات به پیش‌فرض برگشت', 'info');
+    });
+
     document.body.classList.toggle('fa-nums', $('#faDigits').checked);
     $('#base').placeholder = $('#faDigits').checked ? '۱۷۳٬۸۶۰٬۰۰۰' : '173,860,000';
+    applySettingsLabels();
     if (normalizeNumber($('#base').value)) compute();
   </script>
-  <div class="toast" id="toast" role="status" aria-live="polite">
-    <span class="toast-ico" aria-hidden="true">
-      <svg class="t-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
-      <svg class="t-err" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><circle cx="12" cy="16.2" r="1" fill="currentColor" stroke="none"/></svg>
-      <svg class="t-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r="1" fill="currentColor" stroke="none"/></svg>
-    </span>
-    <span class="toast-msg">کپی شد</span>
-  </div>
 </body>
 </html>
